@@ -1,0 +1,74 @@
+.wrapper {
+   width: 15%;
+   height: 100%;
+   border-right: 1px solid #ccc;
+   position: fixed;
+}
+
+.title-app {
+   margin: 40px 0px;
+   font-size: 24px;
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana;
+   font-weight: 600;
+
+   cursor: pointer;
+}
+
+@keyframes show {
+   0% {
+      background-color: #fff;
+   }
+   100% {
+      background-color: #edebeb;
+   }
+}
+
+@mixin showSidebarChild() {
+   animation: 0.5s show ease;
+}
+
+.btn-icon {
+   padding: 12px 0px 12px 12px;
+   cursor: pointer;
+   border-radius: 8px;
+   text-decoration: none;
+
+   &:hover {
+      @include showSidebarChild();
+      background-color: #edebeb;
+   }
+}
+
+.navlink {
+   text-decoration: none;
+   color: #000;
+   align-items: center;
+}
+
+.profileNavLink {
+   display: flex;
+   align-items: center;
+}
+
+.btn-icon + .btn-icon {
+   margin-top: 10px;
+}
+
+.icon {
+   font-size: 24px;
+   min-width: 30px;
+   margin-right: 20px;
+}
+
+.btn-more {
+   margin-top: 93%;
+   padding: 12px 0px 12px 12px;
+   cursor: pointer;
+   border-radius: 8px;
+   text-decoration: none;
+
+   &:hover {
+      @include showSidebarChild();
+      background-color: #edebeb;
+   }
+}

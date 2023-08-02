@@ -1,0 +1,46 @@
+.wrapper {
+   text-align: center;
+}
+
+.wrapper1,
+.wrapper2 {
+   text-align: center;
+   width: 16%;
+   margin-left: 37%;
+   padding: 2% 6%;
+   border: 1px solid #ccc;
+   box-shadow: 0px 0px 3px 3px #e2e1e1;
+}
+
+.wrapper1 {
+   margin-top: 7%;
+   margin-bottom: 2%;
+}
+
+.login-title {
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana,
+      sans-serif;
+   font-weight: 600;
+   font-size: 24px;
+   margin-bottom: 40px;
+}
+
+.forgotpassword {
+   text-decoration: none;
+   color: #2c7ab9;
+
+   &:hover {
+      text-decoration: underline;
+   }
+}
+
+.signup {
+   text-decoration: none;
+   color: #59acf0;
+   font-weight: 600;
+}
+
+.error {
+   color: red;
+   font-style: italic;
+}

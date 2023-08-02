@@ -1,0 +1,29 @@
+.wrapper {
+   margin-left: 4%;
+}
+
+.profile-user {
+   margin-bottom: 20px;
+}
+
+.content-suggested {
+   position: relative;
+   width: 100%;
+   font-size: 16px;
+   color: #666464;
+}
+
+.see-all {
+   position: absolute;
+   right: 0;
+   color: #282727;
+   cursor: pointer;
+
+   &:hover {
+      opacity: 0.7;
+   }
+}
+
+.form-suggested {
+   margin-top: 20px;
+}

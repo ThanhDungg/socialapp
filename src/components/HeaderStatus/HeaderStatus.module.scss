@@ -1,0 +1,24 @@
+.header-status {
+   display: flex;
+   width: 100%;
+   align-items: center;
+   margin-top: 12px;
+}
+
+.name-header {
+   display: flex;
+   width: 100%;
+}
+
+.name-person-header {
+   width: auto;
+}
+
+.time-status-header {
+   width: 72%;
+}
+
+.more {
+   font-size: 20px;
+   cursor: pointer;
+}

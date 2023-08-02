@@ -1,0 +1,28 @@
+@keyframes rotate {
+   0% {
+      transform: rotate(0deg);
+   }
+   100% {
+      transform: rotate(360deg);
+   }
+}
+
+@mixin runRotate() {
+   animation: 1s rotate infinite;
+}
+
+.wrapper {
+   position: fixed;
+   z-index: 2;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background: rgba(0, 0, 0, 0.2);
+   text-align: center;
+}
+
+.loading {
+   margin-top: 20%;
+   @include runRotate();
+}
