@@ -48,7 +48,7 @@ function Register({
                            event.preventDefault();
                         }
                      }}
-                     length={10}
+                     length={11}
                   />
                </div>
                <div>

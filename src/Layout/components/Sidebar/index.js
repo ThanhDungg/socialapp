@@ -32,7 +32,7 @@ function Sidebar({ handleCreatePost }) {
             SEARCH
          </div>
          <div className={cx('btn-icon')}>
-            <NavLink className={cx('navlink')}>
+            <NavLink to={'/message'} className={cx('navlink')}>
                <FontAwesomeIcon className={cx('icon')} icon={faMessage} />
                MESSAGE
             </NavLink>

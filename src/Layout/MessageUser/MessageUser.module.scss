@@ -1,0 +1,81 @@
+.list-conversation {
+   display: flex;
+   margin-left: 16%;
+}
+
+.conversation {
+   margin-left: 5%;
+   width: 100%;
+}
+
+.header-conversation {
+   display: flex;
+   align-items: center;
+   border: 1px solid #ccc;
+   padding: 16px;
+}
+
+.body-conversation {
+   height: 580px;
+   border: none;
+}
+
+.container-message {
+   margin-top: 20px;
+}
+
+.footer-conversation {
+   display: flex;
+   align-items: center;
+   height: 8%;
+   border: 1px solid #ccc;
+   border-radius: 16px;
+   text-align: center;
+}
+
+.input-message {
+   width: 85%;
+   height: 90%;
+   margin-left: 4%;
+   border: none;
+   outline: none;
+   word-wrap: break-word;
+   word-break: break-all;
+}
+
+.btn-send {
+   margin-left: 20px;
+   margin-right: 20px;
+   font-size: 20px;
+   color: rgb(0, 149, 246);
+   font-weight: 600;
+   cursor: pointer;
+
+   &:hover {
+      color: rgb(24, 119, 242);
+   }
+}
+
+.btn-send-img {
+   font-size: 32px;
+   margin-top: 4px;
+   cursor: pointer;
+
+   &:hover {
+      color: #858585;
+   }
+}
+
+.mymessage {
+   align-items: end;
+}
+
+.orthermessage {
+   justify-content: start;
+}
+
+.scroll {
+   overflow-x: hidden;
+   height: 580px;
+   margin-bottom: 10px;
+}

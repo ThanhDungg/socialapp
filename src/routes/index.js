@@ -1,6 +1,7 @@
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
+import MessagePage from '../pages/MessagePage';
 import RegisterPage from '../pages/RegisterPage';
 
 const publicRoutes = [
@@ -8,6 +9,7 @@ const publicRoutes = [
    { path: '/home', component: HomePage, Layout: HomePage },
    { path: '/register', component: RegisterPage, Layout: RegisterPage },
    { path: '/forgotpassword', component: ForgotPasswordPage, Layout: ForgotPasswordPage },
+   { path: '/message', component: MessagePage, Layout: MessagePage },
 ];
 
 const privateRoutes = [];

@@ -14,13 +14,13 @@ import BodyStatus from '../../../components/BodyStatus';
 
 const cx = classNames.bind(styles);
 
-function BodyHome({ listStatus = [], like = 2000, handleShowCreatePost }) {
+function BodyHome({ listStatus = [], handleShowCreatePost }) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('form-post-status')}>
             <ImgToProfile src={img} />
             <button className={cx('btn')} onClick={handleShowCreatePost}>
-               Khang ơi, bạn nghĩ gì thế?
+               Bạn ơi, bạn nghĩ gì thế?
             </button>
          </div>
          <div className={cx('form-all-status')}>
@@ -31,8 +31,9 @@ function BodyHome({ listStatus = [], like = 2000, handleShowCreatePost }) {
                        return (
                           <div className={cx('status')}>
                              <HeaderStatus
+                                avatar={status.USER.AVATAR}
                                 fullname={status.USER.USERNAME}
-                                caption={status.CAPTION}
+                                caption={'1d'}
                                 children={<FontAwesomeIcon icon={faEllipsis} />}
                              />
                              <BodyStatus status={status} />
@@ -40,13 +41,8 @@ function BodyHome({ listStatus = [], like = 2000, handleShowCreatePost }) {
                                 <div>
                                    <FormReaction />
                                 </div>
-                                <TotalLike totalLike={like} />
-                                <Caption
-                                   name={'Dung'}
-                                   caption={
-                                      'VIỆT NAM TRONG TÔI LÀ NGÀN KHÚC CÂU CA, CHO TÔI YÊU THƯƠNG TỰ HÀO BIẾT MẤY'
-                                   }
-                                />
+                                <TotalLike totalLike={parseInt(status.LIKES)} />
+                                <Caption name={status.USER.USERNAME} caption={status.CAPTION} />
                                 <ViewAllCmt totalCmt={200} />
                                 <InputCmt />
                              </div>
