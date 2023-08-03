@@ -44,8 +44,12 @@ function Home() {
    useEffect(() => {
       const fectdata = async () => {
          const res = await getData(home_Url, localStorage.getItem('accessToken'));
-         console.log(res.data.result);
-         setListStatus(res.data.result);
+         if (typeof res.data.result === undefined) {
+            setListStatus([]);
+         } else {
+            console.log(res.data.result);
+            await setListStatus(res.data.result);
+         }
       };
       fectdata();
    }, []);

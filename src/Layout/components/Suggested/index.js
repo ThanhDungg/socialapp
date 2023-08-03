@@ -9,22 +9,38 @@ function Suggested({ listUser }) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('profile-user')}>
-            <HeaderStatus fullname={listUser[0].USER.USERNAME} caption={listUser[0].CAPTION} children={<div></div>} />
+            {listUser === undefined || listUser.length == 0 ? (
+               ''
+            ) : (
+               <HeaderStatus
+                  fullname={listUser[0].USER.USERNAME}
+                  caption={listUser[0].CAPTION}
+                  children={<div></div>}
+               />
+            )}
          </div>
          <div className={cx('content-suggested')}>
-            Suggested for you
-            <span className={cx('see-all')}>see all</span>
+            {listUser === undefined || listUser.length == 0 ? (
+               ''
+            ) : (
+               <div>
+                  Suggested for you
+                  <span className={cx('see-all')}>see all</span>
+               </div>
+            )}
          </div>
          <div className={cx('form-suggested')}>
-            {listUser.map((status) => {
-               return (
-                  <HeaderStatus
-                     fullname={listUser[0].USER.USERNAME}
-                     caption={listUser[0].CAPTION}
-                     children={<Following />}
-                  />
-               );
-            })}
+            {listUser === undefined || listUser.length == 0
+               ? ''
+               : listUser.map((status) => {
+                    return (
+                       <HeaderStatus
+                          fullname={status.USER.USERNAME}
+                          caption={status.CAPTION}
+                          children={<Following />}
+                       />
+                    );
+                 })}
          </div>
       </div>
    );

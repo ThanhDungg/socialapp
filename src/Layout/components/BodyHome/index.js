@@ -14,7 +14,7 @@ import BodyStatus from '../../../components/BodyStatus';
 
 const cx = classNames.bind(styles);
 
-function BodyHome({ listStatus, like = 2000, handleShowCreatePost }) {
+function BodyHome({ listStatus = [], like = 2000, handleShowCreatePost }) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('form-post-status')}>
@@ -25,34 +25,34 @@ function BodyHome({ listStatus, like = 2000, handleShowCreatePost }) {
          </div>
          <div className={cx('form-all-status')}>
             <div className={cx('all-status')}>
-               {listStatus.length == 0 || typeof listStatus === undefined ? (
-                  <div></div>
-               ) : (
-                  listStatus.map((status) => {
-                     return (
-                        <div className={cx('status')}>
-                           <HeaderStatus
-                              fullname={status.USER.USERNAME}
-                              caption={status.CAPTION}
-                              children={<FontAwesomeIcon icon={faEllipsis} />}
-                           />
-                           <BodyStatus status={status} />
-                           <div className={cx('cmt-status')}>
-                              <div>
-                                 <FormReaction />
-                              </div>
-                              <TotalLike totalLike={like} />
-                              <Caption
-                                 name={'Dung'}
-                                 caption={'VIỆT NAM TRONG TÔI LÀ NGÀN KHÚC CÂU CA, CHO TÔI YÊU THƯƠNG TỰ HÀO BIẾT MẤY'}
-                              />
-                              <ViewAllCmt totalCmt={200} />
-                              <InputCmt />
-                           </div>
-                        </div>
-                     );
-                  })
-               )}
+               {listStatus === undefined || listStatus.length == 0
+                  ? ''
+                  : listStatus.map((status) => {
+                       return (
+                          <div className={cx('status')}>
+                             <HeaderStatus
+                                fullname={status.USER.USERNAME}
+                                caption={status.CAPTION}
+                                children={<FontAwesomeIcon icon={faEllipsis} />}
+                             />
+                             <BodyStatus status={status} />
+                             <div className={cx('cmt-status')}>
+                                <div>
+                                   <FormReaction />
+                                </div>
+                                <TotalLike totalLike={like} />
+                                <Caption
+                                   name={'Dung'}
+                                   caption={
+                                      'VIỆT NAM TRONG TÔI LÀ NGÀN KHÚC CÂU CA, CHO TÔI YÊU THƯƠNG TỰ HÀO BIẾT MẤY'
+                                   }
+                                />
+                                <ViewAllCmt totalCmt={200} />
+                                <InputCmt />
+                             </div>
+                          </div>
+                       );
+                    })}
             </div>
          </div>
       </div>
