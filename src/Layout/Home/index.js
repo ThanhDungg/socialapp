@@ -3,56 +3,24 @@ import styles from './Home.module.scss';
 import Sidebar from '../components/Sidebar';
 import BodyHome from '../components/BodyHome';
 import Suggested from '../components/Suggested';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getData } from '../../config/fetchData';
 import { home_Url } from '../../config/configs';
 import CreatePost from '../components/CreatePost';
 import Loading from '../components/Loading';
+import { SocketContext } from '../../App';
+import StatusPost from '../components/StatusPost';
 
 const cx = classNames.bind(styles);
 
 function Home() {
+   const socket = useContext(SocketContext);
    const [isLoading, setIsLoading] = useState(false);
+   const [showStatusPost, setShowStatusPost] = useState(false);
 
-   const tempObject = {
-      ID: '',
-      CAPTION: '',
-      LIKES: '',
-      createdAt: '',
-      POST_IMAGEs: [
-         {
-            IMAGE: '',
-         },
-         {
-            IMAGE: '',
-         },
-      ],
-      USER: {
-         ID: '',
-         USERNAME: '',
-         FULLNAME: '',
-         AVATAR: '',
-         FOLLOWING: '',
-         FOLLOWERS: '',
-         POSTS: '',
-      },
-   };
-
-   const [listStatus, setListStatus] = useState([]);
    const [showCreatePost, setShowCreatePost] = useState(false);
 
-   useEffect(() => {
-      const fectdata = async () => {
-         const res = await getData(home_Url, localStorage.getItem('accessToken'));
-         if (typeof res.data.result === undefined) {
-            setListStatus([]);
-         } else {
-            console.log(res.data.result);
-            await setListStatus(res.data.result);
-         }
-      };
-      fectdata();
-   }, []);
+   const [statusPost, setStatusPost] = useState({});
 
    const handleShowCreatePost = () => {
       setShowCreatePost(true);
@@ -66,12 +34,31 @@ function Home() {
       }
    };
 
+   const [listStatus, setListStatus] = useState([]);
+   useEffect(() => {
+      const fectdata = async () => {
+         const res = await getData(home_Url, localStorage.getItem('accessToken'));
+         if (typeof res.data.result === undefined) {
+         } else {
+            await setListStatus(res.data.result);
+         }
+      };
+      fectdata();
+   }, []);
+
    return (
       <div className={cx('wrapper')}>
          <Sidebar handleCreatePost={handleShowCreatePost} />
          {showCreatePost && <CreatePost handleHiddenCreatePost={handleHiddenCreatePost} setIsLoading={setIsLoading} />}
-         <BodyHome listStatus={listStatus} handleShowCreatePost={handleShowCreatePost} />
-         <Suggested listUser={listStatus} />
+         <BodyHome
+            handleShowCreatePost={handleShowCreatePost}
+            socket={socket}
+            listStatus={listStatus}
+            setStatusPost={setStatusPost}
+            setShowStatusPost={setShowStatusPost}
+         />
+         <Suggested listUser={[]} />
+         {showStatusPost && <StatusPost status={statusPost} setShowStatusPost={setShowStatusPost} />}
          {isLoading && <Loading />}
       </div>
    );

@@ -15,104 +15,104 @@ const cx = classNames.bind(styles);
 function MessageUser() {
    const listMessage = [
       {
-         ID: 1,
+         ID: '20237317337766',
          MESSAGE: 'OrtherMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 1,
+         ID: '20237317337766',
          MESSAGE: 'OrtherMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 1,
+         ID: '20237317337766',
          MESSAGE: 'OrtherMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 1,
+         ID: '20237317337766',
          MESSAGE: 'OrtherMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 1,
+         ID: '20237317337766',
          MESSAGE: 'OrtherMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 1,
+         ID: '20237317337766',
          MESSAGE: 'OrtherMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 1,
+         ID: '20237317337766',
          MESSAGE: 'OrtherMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 1,
+         ID: '20237317337766',
          MESSAGE: 'OrtherMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
       {
-         ID: 2,
+         ID: '2',
          MESSAGE: 'MyMessage',
          CREATED_AT: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
       },
    ];
 
-   const [id, setID] = useState(0);
+   const [id, setID] = useState('');
 
    const [user, setUser] = useState({});
    const [message, setMessage] = useState(listMessage);
 
    const handleClickConversation = async (con) => {
-      await setID(con.ID);
+      await setID(con.CONVERSATION.USER_CONVERSATIONs[0].USER_ID);
       await setUser(con);
    };
 
@@ -140,8 +140,8 @@ function MessageUser() {
             {id != 0 ? (
                <div className={cx('conversation')}>
                   <div className={cx('header-conversation')}>
-                     <ImgToProfile src={user.AVATAR} />
-                     <div>{user.USER_NAME}</div>
+                     <ImgToProfile src={user.CONVERSATION.USER_CONVERSATIONs[0].USER.AVATAR} />
+                     <div>{user.CONVERSATION.USER_CONVERSATIONs[0].USER.USERNAME}</div>
                   </div>
                   <ScrollToBottom className={cx('scroll')}>
                      <div className={cx('body-conversation')}>

@@ -3,6 +3,12 @@ import { publicRoutes } from './routes';
 import DefaultLayout from './Layout/DefaultLayout';
 import { Fragment } from 'react';
 
+import io from 'socket.io-client';
+import { createContext } from 'react';
+
+const socket = io.connect('http://127.0.0.1:8000');
+
+export const SocketContext = createContext();
 function App() {
    return (
       <BrowserRouter>
@@ -22,9 +28,11 @@ function App() {
                      <Route
                         path={route.path}
                         element={
-                           <Layout>
-                              <Page />
-                           </Layout>
+                           <SocketContext.Provider value={socket}>
+                              <Layout>
+                                 <Page />
+                              </Layout>
+                           </SocketContext.Provider>
                         }
                      />
                   );

@@ -5,8 +5,6 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import BtnNextPrev from '../../../components/BtnNextPrev';
 import HeaderStatus from '../../../components/HeaderStatus';
-import { postData } from '../../../config/fetchData';
-import { postStatus } from '../../../config/configs';
 
 const cx = classNames.bind(styles);
 
@@ -38,19 +36,37 @@ function CreatePost({ handleHiddenCreatePost, setIsLoading }) {
          if (!window.confirm('Bạn có muốn đăng bài?')) {
             return;
          } else {
-            setIsLoading(true);
+            // console.log(listImg);
+            await setIsLoading(true);
             let formData = new FormData();
-            formData.append('caption', document.getElementById('input-status').value);
-            formData.append('file', listImg);
-            const res = await postData(postStatus, formData, localStorage.getItem('accessToken'));
-            console.log(res);
-            if (res.data.status == 1) {
-               setIsLoading(false);
-               alert('Thanh cong');
-            } else {
-               setIsLoading(false);
-               alert('That bai');
+            await formData.append('caption', document.getElementById('input-status').value);
+            var tempImg = document.querySelector('[name = "files"]').files;
+            // console.log(tempImg);
+            for (let i = 0; i < tempImg.length; i++) {
+               await formData.append('file', tempImg[i]);
+               console.log(tempImg[i]);
             }
+            await fetch(`https://ptit-social-app.onrender.com/api/post`, {
+               method: 'POST',
+               body: formData,
+               headers: {
+                  accessToken: localStorage.getItem('accessToken'),
+               },
+            })
+               .then((json) => json.json())
+               .then((res) => {
+                  console.log(res);
+                  if (res.status == 1) {
+                     setIsLoading(false);
+                     window.location.reload();
+                  } else {
+                     setIsLoading(false);
+                     alert('That bai');
+                  }
+               })
+               .catch((e) => {
+                  console.log(e);
+               });
          }
       }
    };
@@ -73,14 +89,14 @@ function CreatePost({ handleHiddenCreatePost, setIsLoading }) {
                            <label for="input-img" className={cx('btn-select-computer')}>
                               Select from your computer
                            </label>
-                           <input id="input-img" name="files" type="file" hidden multiple onChange={chooseFile} />
                         </div>
                      ) : (
                         <div className={cx('place-img')}>
-                           <img className={cx('img')} src={listImg[indexImg].preview} />
+                           <img className={cx('img')} name="img-post" src={listImg[indexImg].preview} />
                            <BtnNextPrev handleNext={handleNext} handlePrev={handlePrev} />
                         </div>
                      )}
+                     <input id="input-img" name="files" type="file" hidden multiple onChange={chooseFile} />
                   </div>
                   <div className={cx('status')}>
                      <div className={cx('header-status')}>

@@ -3,15 +3,19 @@ import styles from './Login.module.scss';
 import InputLogin from '../../components/InputLogin';
 import SubmitLogin from '../../components/SubmitLogin';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Loading from '../components/Loading';
 import { postData } from '../../config/fetchData';
 import { login_Url } from '../../config/configs';
+
+import { SocketContext } from '../../App';
 
 const cx = classNames.bind(styles);
 
 function Login() {
    const navigate = useNavigate();
+
+   const socket = useContext(SocketContext);
    //Check and get Current account
    const [isLoading, setIsLoading] = useState(false);
    const [errormsg, setErrormsg] = useState('');
@@ -40,6 +44,7 @@ function Login() {
       if (res.data.status == 1) {
          setIsLoading(false);
          await localStorage.setItem('accessToken', res.data.accessToken);
+         await socket.emit('joinUser', localStorage.getItem('accessToken'));
          await navigate(`/home`);
       } else {
          setIsLoading(false);

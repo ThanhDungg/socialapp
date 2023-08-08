@@ -21,32 +21,40 @@ function Sidebar({ handleCreatePost }) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('title-app')}>Social app</div>
-         <div className={cx('btn-icon')}>
-            <NavLink className={cx('navlink')}>
+         <NavLink to={'/home'} className={cx('navlink')}>
+            <div className={cx('btn-icon')}>
                <FontAwesomeIcon className={cx('icon')} icon={faHome} />
                HOME
-            </NavLink>
-         </div>
-         <div className={cx('btn-icon')}>
-            <FontAwesomeIcon className={cx('icon')} icon={faMagnifyingGlass} />
-            SEARCH
-         </div>
-         <div className={cx('btn-icon')}>
-            <NavLink to={'/message'} className={cx('navlink')}>
+            </div>
+         </NavLink>
+         <NavLink className={cx('navlink')}>
+            <div className={cx('btn-icon')}>
+               <FontAwesomeIcon className={cx('icon')} icon={faMagnifyingGlass} />
+               SEARCH
+            </div>
+         </NavLink>
+         <NavLink to={'/message'} className={cx('navlink')}>
+            <div className={cx('btn-icon')}>
                <FontAwesomeIcon className={cx('icon')} icon={faMessage} />
                MESSAGE
-            </NavLink>
-         </div>
+            </div>
+         </NavLink>
+
+         <NavLink className={cx('navlink')}>
+            <div className={cx('btn-icon')}>
+               <FontAwesomeIcon className={cx('icon')} icon={faBell} />
+               NOTIFICATION
+            </div>
+         </NavLink>
+
+         <NavLink className={cx('navlink')}>
+            <div className={cx('btn-icon')} onClick={handleCreatePost}>
+               <FontAwesomeIcon className={cx('icon')} icon={faSquarePlus} />
+               CREATE
+            </div>
+         </NavLink>
          <div className={cx('btn-icon')}>
-            <FontAwesomeIcon className={cx('icon')} icon={faBell} />
-            NOTIFICATION
-         </div>
-         <div className={cx('btn-icon')} onClick={handleCreatePost}>
-            <FontAwesomeIcon className={cx('icon')} icon={faSquarePlus} />
-            CREATE
-         </div>
-         <div className={cx('btn-icon')}>
-            <NavLink className={cx('navlink', 'profileNavLink')}>
+            <NavLink to={'/profile'} className={cx('navlink', 'profileNavLink')}>
                <ImgToProfile src={img} />
                <span className={cx('profile')}>PROFILE</span>
             </NavLink>

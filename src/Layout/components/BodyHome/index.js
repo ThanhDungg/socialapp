@@ -12,9 +12,27 @@ import InputCmt from '../../../components/InputCmt';
 import HeaderStatus from '../../../components/HeaderStatus';
 import BodyStatus from '../../../components/BodyStatus';
 
+import { useEffect, useState } from 'react';
+import { getComment, home_Url } from '../../../config/configs';
+import { getData } from '../../../config/fetchData';
+
 const cx = classNames.bind(styles);
 
-function BodyHome({ listStatus = [], handleShowCreatePost }) {
+function BodyHome({ handleShowCreatePost, socket, listStatus, setStatusPost, setShowStatusPost, listComment }) {
+   useEffect(() => {
+      socket.on('likeToClient', async (newPost) => {
+         document.getElementById(`${newPost.ID}`).textContent =
+            parseInt(document.getElementById(`${newPost.ID}`).textContent) + 1;
+      });
+   }, [socket]);
+
+   useEffect(() => {
+      socket.on('unLikeToClient', async (newPost) => {
+         console.log(newPost);
+         document.getElementById(`${newPost.ID}`).textContent =
+            parseInt(document.getElementById(`${newPost.ID}`).textContent) - 1;
+      });
+   }, [socket]);
    return (
       <div className={cx('wrapper')}>
          <div className={cx('form-post-status')}>
@@ -39,11 +57,29 @@ function BodyHome({ listStatus = [], handleShowCreatePost }) {
                              <BodyStatus status={status} />
                              <div className={cx('cmt-status')}>
                                 <div>
-                                   <FormReaction />
+                                   <FormReaction
+                                      socket={socket}
+                                      post={status}
+                                      setShowStatusPost={() => {
+                                         setShowStatusPost(true);
+                                      }}
+                                      setStatusPost={setStatusPost}
+                                   />
                                 </div>
-                                <TotalLike totalLike={parseInt(status.LIKES)} />
+                                <TotalLike Like={status.LIKES} id={status.ID} />
                                 <Caption name={status.USER.USERNAME} caption={status.CAPTION} />
-                                <ViewAllCmt totalCmt={200} />
+                                <ViewAllCmt
+                                   totalCmt={200}
+                                   onClick={async () => {
+                                      setShowStatusPost(true);
+                                      setStatusPost(status);
+                                      const res = await getData(
+                                         getComment + `${status.ID}`,
+                                         localStorage.getItem('accessToken'),
+                                      );
+                                      console.log(res);
+                                   }}
+                                />
                                 <InputCmt />
                              </div>
                           </div>

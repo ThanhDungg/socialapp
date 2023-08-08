@@ -35,6 +35,7 @@ function Suggested({ listUser }) {
                : listUser.map((status) => {
                     return (
                        <HeaderStatus
+                          avatar={status.USER.AVATAR}
                           fullname={status.USER.USERNAME}
                           caption={status.CAPTION}
                           children={<Following />}

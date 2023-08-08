@@ -1,0 +1,86 @@
+.place-profile {
+   display: flex;
+   justify-content: center;
+   margin-left: 32%;
+   margin-right: 16%;
+   border-bottom: 1px solid #ccc;
+}
+
+.header-profile {
+   margin: 5% 10% 5% 2%;
+   margin-top: 5%;
+}
+
+.container-profile {
+   margin-top: 8%;
+}
+
+.first-header {
+   display: flex;
+   font-size: 24px;
+}
+
+.user-name {
+   font-weight: 550;
+   margin-right: 50%;
+}
+
+.settings {
+   cursor: pointer;
+   &:hover {
+      opacity: 0.7;
+   }
+}
+.second-header {
+   display: flex;
+   margin-top: 8%;
+}
+.body-second-header {
+   cursor: pointer;
+
+   &:hover {
+      opacity: 0.7;
+   }
+}
+
+.body-second-header + .body-second-header {
+   margin-left: 40px;
+}
+
+.third-header {
+   margin-top: 8%;
+   font-weight: 550;
+}
+
+.post {
+   margin-left: 32%;
+}
+
+.title-post {
+   margin-left: 36%;
+   margin-top: 2%;
+   font-size: 16px;
+}
+
+.title {
+   font-size: 16px;
+   margin-left: 8px;
+}
+
+.body-post {
+   display: flex;
+   flex-wrap: wrap;
+   margin-top: 16px;
+   width: 750px;
+}
+
+.img {
+   width: 32%;
+   height: 33%;
+   margin-left: 1%;
+   margin-top: 1%;
+   cursor: pointer;
+}
+
+.img + .img {
+}

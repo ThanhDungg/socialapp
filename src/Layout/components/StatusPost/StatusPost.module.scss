@@ -1,0 +1,38 @@
+.wrapper {
+   position: fixed;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background: rgba(0, 0, 0, 0.2);
+}
+
+.body-status {
+   display: flex;
+   background-color: #fff;
+   margin-left: 20%;
+   margin-right: 20%;
+   margin-top: 3%;
+   padding: 10px;
+}
+
+.status {
+   width: 50%;
+}
+
+.footer-status {
+   margin-left: 1%;
+   padding-left: 2%;
+   width: 45%;
+   position: relative;
+   border-left: 1px solid #ccc;
+}
+
+.comment {
+   overflow-y: scroll;
+}
+
+.input-cmt {
+   position: absolute;
+   bottom: 10px;
+}
