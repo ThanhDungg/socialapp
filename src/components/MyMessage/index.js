@@ -7,8 +7,8 @@ function MyMessage({ mes }) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('message')}>
-            <div>{mes.MESSAGE}</div>
-            <div>{mes.CREATED_AT}</div>
+            <div className={cx('content')}>{mes.CONTENT}</div>
+            <div className={cx('time')}>{new Date(mes.createdAt).toDateString()}</div>
          </div>
       </div>
    );

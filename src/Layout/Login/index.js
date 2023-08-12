@@ -44,6 +44,7 @@ function Login() {
       if (res.data.status == 1) {
          setIsLoading(false);
          await localStorage.setItem('accessToken', res.data.accessToken);
+         await localStorage.setItem('idUser', res.data.userDetail.ID);
          await socket.emit('joinUser', localStorage.getItem('accessToken'));
          await navigate(`/home`);
       } else {

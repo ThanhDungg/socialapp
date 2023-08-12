@@ -10,7 +10,7 @@ import { deleteData, postData } from '../../config/fetchData';
 const cx = classNames.bind(styles);
 
 function FormReaction({ socket, post, setShowStatusPost, setStatusPost }) {
-   const [reaction, setReaction] = useState(false);
+   const [reaction, setReaction] = useState(parseInt(post.ISLIKED));
    console.log(post);
 
    const changeReactionLike = async () => {
@@ -43,7 +43,7 @@ function FormReaction({ socket, post, setShowStatusPost, setStatusPost }) {
       <div className={cx('form-reaction-cmt-share')}>
          <div className={cx('reaction-cmt-share')}>
             <span className={cx('span-tag-svg')}>
-               {reaction || post.ISLIKED == '1' ? (
+               {reaction == 1 ? (
                   <FontAwesomeIcon
                      className={cx('icon-reaction-heart')}
                      icon={faHeart}

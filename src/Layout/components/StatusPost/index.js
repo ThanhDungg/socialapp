@@ -10,11 +10,30 @@ import Close from '../../../components/Close';
 import { useContext } from 'react';
 import { SocketContext } from '../../../App';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import Comment from '../../../components/Comment';
+import ChildrenCmt from '../../../components/ChildrenCmt';
+import { postData } from '../../../config/fetchData';
+import { postComment } from '../../../config/configs';
 
 const cx = classNames.bind(styles);
 
-function StatusPost({ status, setShowStatusPost }) {
+function StatusPost({ status, setShowStatusPost, listComment }) {
    const socket = useContext(SocketContext);
+
+   const sendComment = async (id) => {
+      const res = await postData(
+         postComment + `${id}/none`,
+         {
+            content: document.getElementById(`comment-${id}`).value,
+         },
+         localStorage.getItem('accessToken'),
+      );
+      if (res.data.status == 1) {
+         document.getElementById(`comment-${id}`).value = '';
+      } else {
+         alert('Comment fail');
+      }
+   };
 
    return (
       <div className={cx('wrapper')}>
@@ -35,11 +54,43 @@ function StatusPost({ status, setShowStatusPost }) {
             </div>
             <div className={cx('footer-status')}>
                <div className={cx('cmt-status')}>
-                  <ScrollToBottom>
-                     <div className={cx('comment')}>abc</div>
-                  </ScrollToBottom>
+                  <div className={cx('comment')}>
+                     <ScrollToBottom className={cx('scroll')}>
+                        <div className={cx('list-cmt')}>
+                           {listComment.map((cmt) => {
+                              return (
+                                 <div>
+                                    <Comment
+                                       content={cmt.CONTENT}
+                                       avatar={cmt.USER.AVATAR}
+                                       username={cmt.USER.USERNAME}
+                                       time={new Date(cmt.createdAt).toDateString()}
+                                       idpost={status.ID}
+                                       id={cmt.ID}
+                                    />
+                                    {cmt.COMMENTs.map((cmts) => {
+                                       return (
+                                          <ChildrenCmt
+                                             content={cmts.CONTENT}
+                                             avatar={cmts.USER.AVATAR}
+                                             username={cmts.USER.USERNAME}
+                                             time={new Date(cmts.createdAt).toDateString()}
+                                          />
+                                       );
+                                    })}
+                                 </div>
+                              );
+                           })}
+                        </div>
+                     </ScrollToBottom>
+                  </div>
                   <div className={cx('input-cmt')}>
-                     <InputCmt />
+                     <InputCmt
+                        onKeyPress={() => {
+                           sendComment(status.ID);
+                        }}
+                        id={status.ID}
+                     />
                   </div>
                </div>
             </div>

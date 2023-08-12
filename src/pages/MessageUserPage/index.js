@@ -1,7 +1,6 @@
-import Message from '../../Layout/Message';
 import MessageUser from '../../Layout/MessageUser';
 
-function MessagePage() {
+function MessageUserPage() {
    return (
       <div>
          <MessageUser />
@@ -9,4 +8,4 @@ function MessagePage() {
    );
 }
 
-export default MessagePage;
+export default MessageUserPage;

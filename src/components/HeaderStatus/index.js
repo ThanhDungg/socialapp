@@ -6,11 +6,11 @@ import ImgToProfile from '../ImgToProfile';
 
 const cx = classNames.bind(styles);
 
-function HeaderStatus({ fullname = '', caption = '', children, avatar }) {
+function HeaderStatus({ fullname = '', caption = '', children, avatar, id }) {
    return (
       <div className={cx('header-status')}>
          <div className={cx('img-header')}>
-            <ImgToProfile src={avatar} />
+            <ImgToProfile src={avatar} toLink={`/profile/${id}`} />
          </div>
          <div className={cx('name-header')}>
             <div className={cx('name-person-header')}>{fullname}</div>

@@ -7,6 +7,7 @@ import EditProfile from '../../Layout/components/EditProfile';
 
 function ProfilePage() {
    const navigate = useNavigate();
+
    const [showLogout, setShowLogout] = useState(false);
    const [showChangePassword, setShowChangePassword] = useState(false);
    const [showEditProfile, setShowEditProfile] = useState(false);

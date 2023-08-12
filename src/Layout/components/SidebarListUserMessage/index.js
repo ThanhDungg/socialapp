@@ -39,11 +39,12 @@ function SidebarListUserMessage({ handleClickConversation }) {
 
    const [listConversation, setListConversation] = useState([]);
 
-   useEffect(async () => {
-      const res = await getData(getConversation, localStorage.getItem('accessToken'));
-      await setListConversation(res.data.result);
-      console.log(res);
-      console.log(listConversation);
+   useEffect(() => {
+      const fetchDT = async () => {
+         const res = await getData(getConversation, localStorage.getItem('accessToken'));
+         await setListConversation(res.data.result);
+      };
+      fetchDT();
    }, []);
    return (
       <div className={cx('wrapper')}>

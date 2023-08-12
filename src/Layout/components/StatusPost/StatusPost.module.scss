@@ -28,11 +28,19 @@
    border-left: 1px solid #ccc;
 }
 
-.comment {
-   overflow-y: scroll;
-}
-
 .input-cmt {
    position: absolute;
    bottom: 10px;
+}
+
+// .list-cmt {
+//    height: 500px;
+//    overflow-y: scroll;
+// }
+
+.scroll {
+   margin-top: 20px;
+   overflow-x: hidden;
+   height: 480px;
+   margin-bottom: 10px;
 }

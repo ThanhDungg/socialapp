@@ -18,7 +18,15 @@ import { getData } from '../../../config/fetchData';
 
 const cx = classNames.bind(styles);
 
-function BodyHome({ handleShowCreatePost, socket, listStatus, setStatusPost, setShowStatusPost, listComment }) {
+function BodyHome({
+   handleShowCreatePost,
+   socket,
+   listStatus,
+   setStatusPost,
+   setShowStatusPost,
+   setListComment,
+   user,
+}) {
    useEffect(() => {
       socket.on('likeToClient', async (newPost) => {
          document.getElementById(`${newPost.ID}`).textContent =
@@ -28,7 +36,6 @@ function BodyHome({ handleShowCreatePost, socket, listStatus, setStatusPost, set
 
    useEffect(() => {
       socket.on('unLikeToClient', async (newPost) => {
-         console.log(newPost);
          document.getElementById(`${newPost.ID}`).textContent =
             parseInt(document.getElementById(`${newPost.ID}`).textContent) - 1;
       });
@@ -36,7 +43,7 @@ function BodyHome({ handleShowCreatePost, socket, listStatus, setStatusPost, set
    return (
       <div className={cx('wrapper')}>
          <div className={cx('form-post-status')}>
-            <ImgToProfile src={img} />
+            {/* <ImgToProfile src={user.AVATAR} toLink={`/profile/${localStorage.getItem('idUser')}`} /> */}
             <button className={cx('btn')} onClick={handleShowCreatePost}>
                Bạn ơi, bạn nghĩ gì thế?
             </button>
@@ -49,6 +56,7 @@ function BodyHome({ handleShowCreatePost, socket, listStatus, setStatusPost, set
                        return (
                           <div className={cx('status')}>
                              <HeaderStatus
+                                id={status.USER.ID}
                                 avatar={status.USER.AVATAR}
                                 fullname={status.USER.USERNAME}
                                 caption={'1d'}
@@ -69,7 +77,6 @@ function BodyHome({ handleShowCreatePost, socket, listStatus, setStatusPost, set
                                 <TotalLike Like={status.LIKES} id={status.ID} />
                                 <Caption name={status.USER.USERNAME} caption={status.CAPTION} />
                                 <ViewAllCmt
-                                   totalCmt={200}
                                    onClick={async () => {
                                       setShowStatusPost(true);
                                       setStatusPost(status);
@@ -77,7 +84,7 @@ function BodyHome({ handleShowCreatePost, socket, listStatus, setStatusPost, set
                                          getComment + `${status.ID}`,
                                          localStorage.getItem('accessToken'),
                                       );
-                                      console.log(res);
+                                      setListComment(res.data.result);
                                    }}
                                 />
                                 <InputCmt />

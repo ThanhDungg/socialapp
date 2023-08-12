@@ -39,6 +39,7 @@ function Suggested({ listUser }) {
                           fullname={status.USER.USERNAME}
                           caption={status.CAPTION}
                           children={<Following />}
+                          id={status.USER.ID}
                        />
                     );
                  })}

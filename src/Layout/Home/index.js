@@ -5,11 +5,12 @@ import BodyHome from '../components/BodyHome';
 import Suggested from '../components/Suggested';
 import { useContext, useEffect, useState } from 'react';
 import { getData } from '../../config/fetchData';
-import { home_Url } from '../../config/configs';
+import { getUser, home_Url } from '../../config/configs';
 import CreatePost from '../components/CreatePost';
 import Loading from '../components/Loading';
 import { SocketContext } from '../../App';
 import StatusPost from '../components/StatusPost';
+import SearchHome from '../components/SearchHome';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +22,8 @@ function Home() {
    const [showCreatePost, setShowCreatePost] = useState(false);
 
    const [statusPost, setStatusPost] = useState({});
+
+   const [user, setUser] = useState({});
 
    const handleShowCreatePost = () => {
       setShowCreatePost(true);
@@ -34,6 +37,7 @@ function Home() {
       }
    };
 
+   const [listComment, setListComment] = useState([]);
    const [listStatus, setListStatus] = useState([]);
    useEffect(() => {
       const fectdata = async () => {
@@ -42,13 +46,16 @@ function Home() {
          } else {
             await setListStatus(res.data.result);
          }
+         const res2 = await getData(getUser + `/${localStorage.getItem('idUser')}`, '');
+         console.log(res2);
+         setUser(res2.data.result);
       };
       fectdata();
    }, []);
 
    return (
       <div className={cx('wrapper')}>
-         <Sidebar handleCreatePost={handleShowCreatePost} />
+         <Sidebar handleCreatePost={handleShowCreatePost} user={user} />
          {showCreatePost && <CreatePost handleHiddenCreatePost={handleHiddenCreatePost} setIsLoading={setIsLoading} />}
          <BodyHome
             handleShowCreatePost={handleShowCreatePost}
@@ -56,9 +63,14 @@ function Home() {
             listStatus={listStatus}
             setStatusPost={setStatusPost}
             setShowStatusPost={setShowStatusPost}
+            setListComment={setListComment}
+            user={user}
          />
+
          <Suggested listUser={[]} />
-         {showStatusPost && <StatusPost status={statusPost} setShowStatusPost={setShowStatusPost} />}
+         {showStatusPost && (
+            <StatusPost status={statusPost} setShowStatusPost={setShowStatusPost} listComment={listComment} />
+         )}
          {isLoading && <Loading />}
       </div>
    );

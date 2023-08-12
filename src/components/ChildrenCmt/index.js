@@ -1,10 +1,20 @@
 import classNames from 'classnames/bind';
 import styles from './ChildrenCmt.module.scss';
+import ImgToProfile from '../ImgToProfile';
 
 const cx = classNames.bind(styles);
 
-function ChildrenCmt() {
-   return <div></div>;
+function ChildrenCmt({ content, avatar, username, time }) {
+   return (
+      <div className={cx('wrapper')}>
+         <div className={cx('header-cmt')}>
+            <ImgToProfile src={avatar} />
+            <div className={cx('username')}>{username}</div>
+            <div>{content}</div>
+         </div>
+         <div className={cx('time')}>{time}</div>
+      </div>
+   );
 }
 
 export default ChildrenCmt;
