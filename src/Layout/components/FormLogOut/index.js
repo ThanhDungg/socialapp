@@ -3,10 +3,19 @@ import styles from './FormLogOut.module.scss';
 
 const cx = classNames.bind(styles);
 
-function FormLogOut({ handleLogOut, handleCancel, handleShowChangePassword, handleShowEditProfile }) {
+function FormLogOut({
+   handleLogOut,
+   handleCancel,
+   handleShowChangePassword,
+   handleShowEditProfile,
+   handleShowEditAvatar,
+}) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('form')}>
+            <div className={cx('btn')} onClick={handleShowEditAvatar}>
+               Edit Avatar
+            </div>
             <div className={cx('btn')} onClick={handleShowEditProfile}>
                Edit profile
             </div>

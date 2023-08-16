@@ -6,24 +6,15 @@ import AvatarProfile from '../../../components/AvatarProfile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import { getData, putData } from '../../../config/fetchData';
-import { getUser, putAvatar } from '../../../config/configs';
+import { getData, postData, putData } from '../../../config/fetchData';
+import { getUser, putAvatar, putInfo } from '../../../config/configs';
 
 const cx = classNames.bind(styles);
 
 function EditProfile({ handleEditProfile, handleCancelEditProfile, setLoading }) {
-   const [Alt, setAlt] = useState();
    const [owner, setOwner] = useState({});
    const [errorMes, setErrorMes] = useState('');
-
-   const chooseFile = (inputFile) => {
-      const file = inputFile.target.files[0];
-
-      file.preview = URL.createObjectURL(file);
-
-      setAlt(file);
-      console.log();
-   };
+   const [gender, setGender] = useState('Male');
 
    const handleChangeInfo = async () => {
       if (document.querySelector('[name = "edit-username"]').value == '') {
@@ -32,34 +23,35 @@ function EditProfile({ handleEditProfile, handleCancelEditProfile, setLoading })
       } else if (document.querySelector('[name = "edit-fullname"]').value == '') {
          setErrorMes('FullName không được để trống.');
          return;
+      } else if (document.querySelector('[name = "edit-mobile"]').value == '') {
+         setErrorMes('Number phone không được để trống');
+      } else if (document.querySelector('[name = "edit-mobile"]').value.length < 10) {
+         setErrorMes('Mobile must 10 number');
       } else {
          try {
             setLoading(true);
-            const formData = new FormData();
-            formData.append('file', Alt);
-
-            fetch('https://ptit-social-app.onrender.com/api/user/avatar', {
-               method: 'PUT',
-               body: formData,
-               credentials: 'same-origin', // include, *same-origin, omit,
-               mode: 'cors',
-               headers: {
-                  accessToken: localStorage.getItem('accessToken'),
+            if (document.getElementById('men').checked) {
+               await setGender('Male');
+            } else {
+               await setGender('Female');
+            }
+            const res = await putData(
+               putInfo,
+               {
+                  username: document.querySelector('[name = "edit-username"]').value,
+                  fullname: document.querySelector('[name = "edit-fullname"]').value,
+                  mobile: document.querySelector('[name = "edit-mobile"]').value.trim(),
+                  description: document.querySelector('[name = "edit-description"]').value,
+                  address: document.querySelector('[name = "edit-address"]').value,
+                  gender: gender,
                },
-            })
-               .then((response) => response.json())
-               .then((result) => {
-                  if (result.status == 1) {
-                     window.location.reload();
-                     setLoading(false);
-                     console.log('Success:', result);
-                  } else {
-                     alert('Update fail');
-                  }
-               })
-               .catch((error) => {
-                  console.error('Error:', error);
-               });
+               localStorage.getItem('accessToken'),
+            );
+            console.log(res);
+            if (res.data.status == 1) {
+               window.location.reload();
+            }
+            setLoading(false);
          } catch (e) {
             console.log(e);
          }
@@ -89,15 +81,6 @@ function EditProfile({ handleEditProfile, handleCancelEditProfile, setLoading })
    return (
       <div className={cx('wrapper')}>
          <div className={cx('form-changepassword')}>
-            <div>
-               {!Alt ? <AvatarProfile img={owner.AVATAR} /> : <AvatarProfile img={Alt.preview} />}
-               <label for="avatar" className={cx('avatar-profile')}>
-                  <div>
-                     <FontAwesomeIcon icon={faCamera} />
-                  </div>
-               </label>
-            </div>
-            <input type="file" hidden accept="image/*" name="avatar" id="avatar" onChange={chooseFile} />
             <div className={cx('form-input')}>
                <tr className={cx('tr-title')}>
                   <td className={cx('td-title')}>User name</td>
@@ -121,20 +104,56 @@ function EditProfile({ handleEditProfile, handleCancelEditProfile, setLoading })
                      />
                   </td>
                </tr>
-               {/* <tr className={cx('tr-title')}>
+               <tr className={cx('tr-title')}>
                   <td className={cx('td-title')}>Address</td>
                   <td>
-                     <input className={cx('input')} />
+                     <input
+                        name="edit-address"
+                        className={cx('input')}
+                        defaultValue={owner.ADDRESS}
+                        onChange={onChangeInfo}
+                     />
                   </td>
                </tr>
                <tr className={cx('tr-title')}>
                   <td className={cx('td-title')}>Mobile</td>
                   <td>
-                     <input className={cx('input')} />
+                     <input
+                        name="edit-mobile"
+                        className={cx('input')}
+                        defaultValue={owner.MOBILE}
+                        onChange={onChangeInfo}
+                        onKeyPress={(event) => {
+                           if (!/[0-9]/.test(event.key)) {
+                              event.preventDefault();
+                           }
+                        }}
+                        maxLength={10}
+                     />
                   </td>
-               </tr> */}
-               {/* <input type="radio" name="gender" /> Nam
-               <input type="radio" name="gender" /> Nữ */}
+               </tr>
+               <tr className={cx('tr-title')}>
+                  <td className={cx('td-title')}>Description</td>
+                  <td>
+                     <input
+                        name="edit-description"
+                        className={cx('input')}
+                        defaultValue={owner.DESCRIPTION}
+                        onChange={onChangeInfo}
+                     />
+                  </td>
+               </tr>
+               {owner.GENDER == 'Male' ? (
+                  <div>
+                     <input type="radio" name="gender" id="men" defaultChecked /> Nam
+                     <input type="radio" name="gender" /> Nữ
+                  </div>
+               ) : (
+                  <div>
+                     <input type="radio" name="gender" id="men" /> Nam
+                     <input type="radio" name="gender" defaultChecked /> Nữ
+                  </div>
+               )}
                <div className={cx('errorMes')}>{errorMes}</div>
                <div className={cx('place-btn')}>
                   <button className={cx('btn-change')} onClick={handleChangeInfo}>

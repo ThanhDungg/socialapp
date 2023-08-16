@@ -116,6 +116,7 @@ function Profile({ setShowLogout, setShowStatusPost, setStatus, setListComment }
                </div>
                <div className={cx('third-header')}>
                   <div>{user.FULLNAME}</div>
+                  <div className={cx('description')}>Description: {user.DESCRIPTION}</div>
                </div>
             </div>
          </div>

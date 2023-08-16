@@ -60,15 +60,18 @@
 
 .place-btn {
    margin-top: 20px;
-   margin-left: 60px;
 }
 
 .btn-change {
    margin-right: 50px;
 }
 
-.error {
+.avatar-profile {
+   cursor: pointer;
+}
+
+.errorMes {
    color: red;
-   font-size: 14px;
+   font-size: 12px;
    font-style: italic;
 }

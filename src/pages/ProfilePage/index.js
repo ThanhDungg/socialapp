@@ -9,6 +9,7 @@ import StatusPost from '../../Layout/components/StatusPost';
 import Loading from '../../Layout/components/Loading';
 import { getData } from '../../config/fetchData';
 import { getUser } from '../../config/configs';
+import EditAvatar from '../../Layout/components/EditAvatar';
 
 function ProfilePage() {
    const socket = useContext(SocketContext);
@@ -18,6 +19,7 @@ function ProfilePage() {
 
    const [showLogout, setShowLogout] = useState(false);
    const [showChangePassword, setShowChangePassword] = useState(false);
+   const [showEditAvatar, setShowEditAvatar] = useState(false);
    const [showEditProfile, setShowEditProfile] = useState(false);
    const [showStatusPost, setShowStatusPost] = useState(false);
    const [listComment, setListComment] = useState([]);
@@ -49,10 +51,6 @@ function ProfilePage() {
       setShowChangePassword(false);
    };
 
-   const handleChangePassword = () => {
-      alert('Success');
-   };
-
    const handleShowEditProfile = () => {
       setShowLogout(false);
       setShowEditProfile(true);
@@ -64,6 +62,15 @@ function ProfilePage() {
 
    const handleEditProfile = () => {
       alert('Thanh cong');
+   };
+
+   const handleShowEditAvatar = () => {
+      setShowLogout(false);
+      setShowEditAvatar(true);
+   };
+
+   const handleCancelEditAvatar = () => {
+      setShowEditAvatar(false);
    };
 
    useEffect(() => {
@@ -106,19 +113,25 @@ function ProfilePage() {
                handleCancel={handleCancel}
                handleLogOut={handleLogOut}
                handleShowEditProfile={handleShowEditProfile}
+               handleShowEditAvatar={handleShowEditAvatar}
             />
          )}
          {showChangePassword && (
-            <ChangePassword
-               handleCancelChangePassword={handleCancelChangePassword}
-               handleChangePassword={handleChangePassword}
-            />
+            <ChangePassword handleCancelChangePassword={handleCancelChangePassword} setLoading={setLoading} />
          )}
          {showEditProfile && (
             <EditProfile
                handleEditProfile={handleEditProfile}
                handleCancelEditProfile={handleCancelEditProfile}
                setLoading={setLoading}
+            />
+         )}
+         {showEditAvatar && (
+            <EditAvatar
+               handleEditProfile={handleEditProfile}
+               handleCancelEditProfile={handleCancelEditProfile}
+               setLoading={setLoading}
+               handleCancelEditAvatar={handleCancelEditAvatar}
             />
          )}
 
