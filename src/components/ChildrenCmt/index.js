@@ -4,11 +4,11 @@ import ImgToProfile from '../ImgToProfile';
 
 const cx = classNames.bind(styles);
 
-function ChildrenCmt({ content, avatar, username, time }) {
+function ChildrenCmt({ content, avatar, username, time, idUser }) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('header-cmt')}>
-            <ImgToProfile src={avatar} />
+            <ImgToProfile src={avatar} toLink={`/profile/${idUser}`} />
             <div className={cx('username')}>{username}</div>
             <div>{content}</div>
          </div>

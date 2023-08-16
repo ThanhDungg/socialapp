@@ -19,7 +19,7 @@ const cx = classNames.bind(styles);
 
 function StatusPost({ status, setShowStatusPost, listComment, setListComment, user }) {
    const socket = useContext(SocketContext);
-   console.log(status);
+   console.log(listComment);
 
    const sendComment = async (id) => {
       try {
@@ -64,6 +64,7 @@ function StatusPost({ status, setShowStatusPost, listComment, setListComment, us
                   avatar={status.USER.AVATAR}
                   fullname={status.USER.USERNAME}
                   caption={new Date(status.createdAt).toDateString()}
+                  id={status.USER.ID}
                />
                <BodyStatus status={status} />
                <div>
@@ -87,6 +88,7 @@ function StatusPost({ status, setShowStatusPost, listComment, setListComment, us
                                        time={new Date(cmt.createdAt).toDateString()}
                                        idpost={status.ID}
                                        id={cmt.ID}
+                                       idUser={cmt.USER.ID}
                                     />
                                     {cmt.COMMENTs.map((cmts) => {
                                        return (
@@ -95,6 +97,7 @@ function StatusPost({ status, setShowStatusPost, listComment, setListComment, us
                                              avatar={cmts.USER.AVATAR}
                                              username={cmts.USER.USERNAME}
                                              time={new Date(cmts.createdAt).toDateString()}
+                                             idUser={cmts.USER.ID}
                                           />
                                        );
                                     })}

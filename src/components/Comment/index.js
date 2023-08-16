@@ -7,7 +7,7 @@ import { postComment } from '../../config/configs';
 
 const cx = classNames.bind(styles);
 
-function Comment({ content, avatar, username, time, id, idpost }) {
+function Comment({ content, avatar, username, time, id, idpost, idUser }) {
    const handleCmt = async () => {
       try {
          if (document.getElementById(`${id}`).value == '') {
@@ -34,7 +34,7 @@ function Comment({ content, avatar, username, time, id, idpost }) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('header-cmt')}>
-            <ImgToProfile src={avatar} />
+            <ImgToProfile src={avatar} toLink={`/profile/${idUser}`} />
             <div className={cx('username')}>{username}</div>
             <div>{content}</div>
          </div>

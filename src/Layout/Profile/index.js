@@ -57,6 +57,7 @@ function Profile({ setShowLogout, setShowStatusPost, setStatus, setListComment }
             const res = await getData(getUser + `/${id}`, localStorage.getItem('accessToken'));
             setFollowing(res.data.result.ISFOLLOWED);
             setUser(res.data.result);
+            console.log(res.data.result);
             const res3 = await getData(
                getUser + `/${localStorage.getItem('idUser')}`,
                localStorage.getItem('accessToken'),
@@ -64,6 +65,7 @@ function Profile({ setShowLogout, setShowStatusPost, setStatus, setListComment }
             setOwner(res3.data.result);
             const res2 = await getData(getUserPost + `/${id}`, localStorage.getItem('accessToken'));
             setListPost(res2.data.result);
+            console.log(res2);
          };
          fetchData();
       } catch (e) {
@@ -108,7 +110,7 @@ function Profile({ setShowLogout, setShowStatusPost, setStatus, setListComment }
                   )}
                </div>
                <div className={cx('second-header')}>
-                  <div className={cx('body-second-header')}>0 Post</div>
+                  <div className={cx('body-second-header')}>{user.POSTS} Post</div>
                   <div className={cx('body-second-header')}>{user.FOLLOWERS} Followers</div>
                   <div className={cx('body-second-header')}>{user.FOLLOWING} Following</div>
                </div>
@@ -132,11 +134,9 @@ function Profile({ setShowLogout, setShowStatusPost, setStatus, setListComment }
                            try {
                               setStatus(post);
                               setShowStatusPost(true);
-                              const res = await getData(
-                                 getComment + `/${post.ID}`,
-                                 localStorage.getItem('accessToken'),
-                              );
+                              const res = await getData(getComment + `${post.ID}`, localStorage.getItem('accessToken'));
                               setListComment(res.data.result);
+                              console.log(res);
                            } catch (e) {
                               console.log(e);
                            }

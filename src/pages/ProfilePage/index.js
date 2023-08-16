@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Profile from '../../Layout/Profile';
 import FormLogOut from '../../Layout/components/FormLogOut';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import EditProfile from '../../Layout/components/EditProfile';
 import { SocketContext } from '../../App';
 import StatusPost from '../../Layout/components/StatusPost';
 import Loading from '../../Layout/components/Loading';
+import { getData } from '../../config/fetchData';
+import { getUser } from '../../config/configs';
 
 function ProfilePage() {
    const socket = useContext(SocketContext);
@@ -20,6 +22,7 @@ function ProfilePage() {
    const [showStatusPost, setShowStatusPost] = useState(false);
    const [listComment, setListComment] = useState([]);
    const [status, setStatus] = useState([]);
+   const [user, setUser] = useState();
 
    const handleCancel = () => {
       setShowLogout(false);
@@ -63,6 +66,23 @@ function ProfilePage() {
       alert('Thanh cong');
    };
 
+   useEffect(() => {
+      try {
+         const fetchData = async () => {
+            const res = await getData(
+               getUser + `/${localStorage.getItem('idUser')}`,
+               localStorage.getItem('accessToken'),
+            );
+            if (res.data.result != undefined) {
+               setUser(res.data.result);
+            }
+         };
+         fetchData();
+      } catch (e) {
+         console.log(e);
+      }
+   }, []);
+
    return (
       <div>
          <Profile
@@ -72,7 +92,13 @@ function ProfilePage() {
             setStatus={setStatus}
          />
          {showStatusPost && (
-            <StatusPost status={status} setShowStatusPost={setShowStatusPost} listComment={listComment} />
+            <StatusPost
+               status={status}
+               setShowStatusPost={setShowStatusPost}
+               listComment={listComment}
+               setListComment={setListComment}
+               user={user}
+            />
          )}
          {showLogout && (
             <FormLogOut

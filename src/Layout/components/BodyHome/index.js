@@ -27,6 +27,7 @@ function BodyHome({
    setListComment,
    user,
 }) {
+   console.log(listStatus);
    useEffect(() => {
       socket.on('likeToClient', async (newPost) => {
          document.getElementById(`${newPost.ID}`).textContent =
