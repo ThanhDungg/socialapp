@@ -6,10 +6,17 @@ const cx = classNames.bind(styles);
 function OrtherMessage({ mes }) {
    return (
       <div className={cx('wrapper')}>
-         <div className={cx('message')}>
-            <div className={cx('content')}>{mes.CONTENT}</div>
-            <div className={cx('time')}>{new Date(mes.createdAt).toDateString()}</div>
-         </div>
+         {mes.TYPE == 'text' ? (
+            <div className={cx('message')}>
+               <div className={cx('content')}>{mes.CONTENT}</div>
+               <div className={cx('time')}>{new Date(mes.createdAt).toDateString()}</div>
+            </div>
+         ) : (
+            <div className={cx('message')}>
+               <img src={mes.CONTENT} className={cx('img')} />
+               <div className={cx('time')}>{new Date(mes.createdAt).toDateString()}</div>
+            </div>
+         )}
       </div>
    );
 }

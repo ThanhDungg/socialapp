@@ -13,18 +13,22 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 import ImgToProfile from '../../../components/ImgToProfile';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getData } from '../../../config/fetchData';
 import { getUser } from '../../../config/configs';
 import SearchHome from '../SearchHome';
 import Notifi from '../Notifi';
+import { SocketContext } from '../../../App';
+import Close from '../../../components/Close';
 
 const cx = classNames.bind(styles);
 
 function Sidebar({ handleCreatePost }) {
+   const socket = useContext(SocketContext);
    const [user, setUser] = useState({ AVATAR: '' });
    const [showSearch, setShowSearch] = useState(false);
    const [showNoti, setShowNoti] = useState(false);
+   const [notification, setNotification] = useState([]);
 
    useEffect(() => {
       const fetchData = async () => {
@@ -39,6 +43,26 @@ function Sidebar({ handleCreatePost }) {
       fetchData();
    }, []);
 
+   useEffect(() => {
+      setTimeout(() => {
+         setNotification((list) => list.filter((li, index) => index != list.length - 1));
+      }, 5000);
+   }, [notification.length]);
+
+   useEffect(() => {
+      try {
+         // socket.on('followToClient', async (data) => {
+         //    setNotification((listNoti) => [data, ...listNoti]);
+         //    console.log(data);
+         // });
+         socket.on('notify', async (data) => {
+            setNotification((list) => [...list, { noti: data }]);
+         });
+      } catch (e) {
+         console.log(e);
+      }
+   }, [socket]);
+
    const onClickSearch = () => {
       setShowSearch(!showSearch);
    };
@@ -49,6 +73,17 @@ function Sidebar({ handleCreatePost }) {
 
    return (
       <div className={cx('wrapper')}>
+         <div className={cx('notification')}>
+            {notification.map((noti) => {
+               return (
+                  <div className={cx('notification-child')}>
+                     <Close />
+                     <div className={cx('title-noti')}>Thông báo!</div>
+                     <div>{noti.noti}</div>
+                  </div>
+               );
+            })}
+         </div>
          {showSearch && <SearchHome handleHiddenShow={onClickSearch} />}
          {showNoti && <Notifi handleHiddenShow={onClickNoti} />}
 

@@ -12,17 +12,21 @@ function Notifi({ handleHiddenShow }) {
    const [listUser, setListUser] = useState([]);
 
    useEffect(() => {
-      const fetchData = async () => {
-         const res = await getData(getNoti, localStorage.getItem('accessToken'));
-         console.log(res);
-         setListUser(res.data.result);
-      };
-      fetchData();
+      try {
+         const fetchData = async () => {
+            const res = await getData(getNoti, localStorage.getItem('accessToken'));
+            console.log(res);
+            setListUser(res.data.result);
+         };
+         fetchData();
+      } catch (e) {
+         console.log(e);
+      }
    }, []);
    return (
       <div className={cx('wrapper')}>
          <Close onClick={handleHiddenShow} />
-         <div className={cx('header')}>Notification</div>
+         <div className={cx('header')}>Noti</div>
          <div className={cx('body')}>
             <div className={cx('header-body')}>Recent</div>
             <div>

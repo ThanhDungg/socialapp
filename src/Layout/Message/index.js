@@ -29,21 +29,7 @@ function Message() {
    const [message, setMessage] = useState([]);
 
    const handleClickConversation = async (con) => {
-      navigate(`/message/${con.CONVERSATION.ID}/${con.CONVERSATION.USER_CONVERSATIONs[0].USER_ID}`);
-      // if (id == con.CONVERSATION.USER_CONVERSATIONs[0].USER_ID) {
-      //    return;
-      // }
-      // await setUser(con);
-      // await setIDConver(con.CONVERSATION.ID);
-      // await setID(con.CONVERSATION.USER_CONVERSATIONs[0].USER_ID);
-      // const res = await getData(
-      //    getMessage + `/${con.CONVERSATION.ID}?page=${page}`,
-      //    localStorage.getItem('accessToken'),
-      // );
-      // if (res.data.result.length > 0) {
-      //    setMessage(res.data.result.reverse());
-      // }
-      // console.log(res.data.result);
+      navigate(`/message/${con}`);
    };
 
    useEffect(() => {

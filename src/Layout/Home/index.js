@@ -40,23 +40,31 @@ function Home() {
    const [listComment, setListComment] = useState([]);
    const [listStatus, setListStatus] = useState([]);
    useEffect(() => {
-      const fectdata = async () => {
-         const res = await getData(home_Url, localStorage.getItem('accessToken'));
-         if (typeof res.data.result === undefined) {
-         } else {
-            await setListStatus(res.data.result);
-         }
-         const res2 = await getData(getUser + `/${localStorage.getItem('idUser')}`, '');
-         console.log(res2);
-         setUser(res2.data.result);
-      };
-      fectdata();
+      try {
+         const fectdata = async () => {
+            const res = await getData(home_Url, localStorage.getItem('accessToken'));
+            if (typeof res.data.result === undefined) {
+            } else {
+               await setListStatus(res.data.result);
+            }
+            const res2 = await getData(
+               getUser + `/${localStorage.getItem('idUser')}`,
+               localStorage.getItem('accessToken'),
+            );
+            setUser(res2.data.result);
+         };
+         fectdata();
+      } catch (e) {
+         console.log(e);
+      }
    }, []);
 
    return (
       <div className={cx('wrapper')}>
          <Sidebar handleCreatePost={handleShowCreatePost} user={user} />
-         {showCreatePost && <CreatePost handleHiddenCreatePost={handleHiddenCreatePost} setIsLoading={setIsLoading} />}
+         {showCreatePost && (
+            <CreatePost handleHiddenCreatePost={handleHiddenCreatePost} setIsLoading={setIsLoading} user={user} />
+         )}
          <BodyHome
             handleShowCreatePost={handleShowCreatePost}
             socket={socket}
@@ -69,7 +77,13 @@ function Home() {
 
          <Suggested listUser={[]} />
          {showStatusPost && (
-            <StatusPost status={statusPost} setShowStatusPost={setShowStatusPost} listComment={listComment} />
+            <StatusPost
+               status={statusPost}
+               setShowStatusPost={setShowStatusPost}
+               listComment={listComment}
+               setListComment={setListComment}
+               user={user}
+            />
          )}
          {isLoading && <Loading />}
       </div>

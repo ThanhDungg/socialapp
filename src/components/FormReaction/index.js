@@ -9,33 +9,41 @@ import { deleteData, postData } from '../../config/fetchData';
 
 const cx = classNames.bind(styles);
 
-function FormReaction({ socket, post, setShowStatusPost, setStatusPost }) {
+function FormReaction({ socket, post, setShowStatusPost, setStatusPost, user }) {
    const [reaction, setReaction] = useState(parseInt(post.ISLIKED));
    console.log(post);
 
    const changeReactionLike = async () => {
-      const res = await postData(likePost + `${post.ID}`, '', localStorage.getItem('accessToken'));
-      console.log(res);
-      if (res.data.status == 1) {
-         await setReaction(true);
-         await socket.emit('likePost', post);
-         document.getElementById(`${post.ID}`).textContent =
-            parseInt(document.getElementById(`${post.ID}`).textContent) + 1;
-      } else {
-         alert('Like không thành công');
+      try {
+         const res = await postData(likePost + `${post.ID}`, '', localStorage.getItem('accessToken'));
+         console.log(res);
+         if (res.data.status == 1) {
+            await setReaction(true);
+            await socket.emit('likePost', post);
+            document.getElementById(`${post.ID}`).textContent =
+               parseInt(document.getElementById(`${post.ID}`).textContent) + 1;
+         } else {
+            alert('Like không thành công');
+         }
+      } catch (e) {
+         console.log(e);
       }
    };
 
    const changeReactionUnLike = async () => {
-      const res = await deleteData(likePost + `${post.ID}`, localStorage.getItem('accessToken'));
-      console.log(res);
-      if (res.data.status == 1) {
-         await setReaction(false);
-         await socket.emit('unLikePost', post);
-         document.getElementById(`${post.ID}`).textContent =
-            parseInt(document.getElementById(`${post.ID}`).textContent) - 1;
-      } else {
-         alert('UnLike không thành công');
+      try {
+         const res = await deleteData(likePost + `${post.ID}`, localStorage.getItem('accessToken'));
+         console.log(res);
+         if (res.data.status == 1) {
+            await setReaction(false);
+            await socket.emit('unLikePost', post);
+            document.getElementById(`${post.ID}`).textContent =
+               parseInt(document.getElementById(`${post.ID}`).textContent) - 1;
+         } else {
+            alert('UnLike không thành công');
+         }
+      } catch (e) {
+         console.log(e);
       }
    };
 

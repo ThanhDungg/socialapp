@@ -5,8 +5,9 @@ import { Fragment } from 'react';
 
 import io from 'socket.io-client';
 import { createContext } from 'react';
+const server = 'https://ptit-social-app.onrender.com';
 
-const socket = io.connect('http://127.0.0.1:8000');
+const socket = io.connect(server);
 
 export const SocketContext = createContext();
 

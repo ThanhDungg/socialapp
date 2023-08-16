@@ -11,9 +11,10 @@ import { getUser, putAvatar } from '../../../config/configs';
 
 const cx = classNames.bind(styles);
 
-function EditProfile({ handleEditProfile, handleCancelEditProfile }) {
+function EditProfile({ handleEditProfile, handleCancelEditProfile, setLoading }) {
    const [Alt, setAlt] = useState();
    const [owner, setOwner] = useState({});
+   const [errorMes, setErrorMes] = useState('');
 
    const chooseFile = (inputFile) => {
       const file = inputFile.target.files[0];
@@ -25,42 +26,64 @@ function EditProfile({ handleEditProfile, handleCancelEditProfile }) {
    };
 
    const handleChangeInfo = async () => {
-      const formData = new FormData();
-      formData.append('file', Alt);
+      if (document.querySelector('[name = "edit-username"]').value == '') {
+         setErrorMes('UserName không được để trống.');
+         return;
+      } else if (document.querySelector('[name = "edit-fullname"]').value == '') {
+         setErrorMes('FullName không được để trống.');
+         return;
+      } else {
+         try {
+            setLoading(true);
+            const formData = new FormData();
+            formData.append('file', Alt);
 
-      fetch('https://ptit-social-app.onrender.com/api/user/avatar', {
-         method: 'PUT',
-         body: formData,
-         credentials: 'same-origin', // include, *same-origin, omit,
-         mode: 'cors',
-         headers: {
-            accessToken: localStorage.getItem('accessToken'),
-         },
-      })
-         .then((response) => response.json())
-         .then((result) => {
-            if (result.status == 1) {
-               window.location.reload();
-            } else {
-               alert('Update fail');
-            }
-            console.log('Success:', result);
-         })
-         .catch((error) => {
-            console.error('Error:', error);
-         });
+            fetch('https://ptit-social-app.onrender.com/api/user/avatar', {
+               method: 'PUT',
+               body: formData,
+               credentials: 'same-origin', // include, *same-origin, omit,
+               mode: 'cors',
+               headers: {
+                  accessToken: localStorage.getItem('accessToken'),
+               },
+            })
+               .then((response) => response.json())
+               .then((result) => {
+                  if (result.status == 1) {
+                     window.location.reload();
+                     setLoading(false);
+                     console.log('Success:', result);
+                  } else {
+                     alert('Update fail');
+                  }
+               })
+               .catch((error) => {
+                  console.error('Error:', error);
+               });
+         } catch (e) {
+            console.log(e);
+         }
+      }
+   };
+
+   const onChangeInfo = () => {
+      setErrorMes('');
    };
 
    useEffect(() => {
-      const fetchData = async () => {
-         const res3 = await getData(
-            getUser + `/${localStorage.getItem('idUser')}`,
-            localStorage.getItem('accessToken'),
-         );
-         setOwner(res3.data.result);
-         console.log(res3.data.result);
-      };
-      fetchData();
+      try {
+         const fetchData = async () => {
+            const res3 = await getData(
+               getUser + `/${localStorage.getItem('idUser')}`,
+               localStorage.getItem('accessToken'),
+            );
+            setOwner(res3.data.result);
+            console.log(res3.data.result);
+         };
+         fetchData();
+      } catch (e) {
+         console.log(e);
+      }
    }, []);
 
    return (
@@ -74,21 +97,31 @@ function EditProfile({ handleEditProfile, handleCancelEditProfile }) {
                   </div>
                </label>
             </div>
-            <input type="file" hidden name="avatar" id="avatar" onChange={chooseFile} />
+            <input type="file" hidden accept="image/*" name="avatar" id="avatar" onChange={chooseFile} />
             <div className={cx('form-input')}>
                <tr className={cx('tr-title')}>
                   <td className={cx('td-title')}>User name</td>
                   <td>
-                     <input className={cx('input')} defaultValue={owner.USERNAME} />
+                     <input
+                        name="edit-username"
+                        className={cx('input')}
+                        defaultValue={owner.USERNAME}
+                        onChange={onChangeInfo}
+                     />
                   </td>
                </tr>
                <tr className={cx('tr-title')}>
                   <td className={cx('td-title')}>Full name</td>
                   <td>
-                     <input className={cx('input')} defaultValue={owner.FULLNAME} />
+                     <input
+                        name="edit-fullname"
+                        className={cx('input')}
+                        defaultValue={owner.FULLNAME}
+                        onChange={onChangeInfo}
+                     />
                   </td>
                </tr>
-               <tr className={cx('tr-title')}>
+               {/* <tr className={cx('tr-title')}>
                   <td className={cx('td-title')}>Address</td>
                   <td>
                      <input className={cx('input')} />
@@ -99,9 +132,10 @@ function EditProfile({ handleEditProfile, handleCancelEditProfile }) {
                   <td>
                      <input className={cx('input')} />
                   </td>
-               </tr>
-               <input type="radio" name="gender" /> Nam
-               <input type="radio" name="gender" /> Nữ
+               </tr> */}
+               {/* <input type="radio" name="gender" /> Nam
+               <input type="radio" name="gender" /> Nữ */}
+               <div className={cx('errorMes')}>{errorMes}</div>
                <div className={cx('place-btn')}>
                   <button className={cx('btn-change')} onClick={handleChangeInfo}>
                      Edit

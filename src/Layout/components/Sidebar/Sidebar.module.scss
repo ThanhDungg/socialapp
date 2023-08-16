@@ -72,3 +72,21 @@
       background-color: #edebeb;
    }
 }
+
+.notification {
+   position: absolute;
+   left: 10px;
+   bottom: 30px;
+}
+
+.notification-child {
+   position: relative;
+   margin-top: 10px;
+   padding: 8px 12px;
+   width: 180px;
+   background-color: #dad7d7;
+}
+
+.title-noti {
+   color: #f54b4b;
+}

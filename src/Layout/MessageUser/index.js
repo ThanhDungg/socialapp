@@ -5,18 +5,22 @@ import SidebarListUserMessage from '../components/SidebarListUserMessage';
 import ImgToProfile from '../../components/ImgToProfile';
 import { useContext, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import OrtherMessage from '../../components/OrtherMessage';
 import MyMessage from '../../components/MyMessage';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { getData, postData } from '../../config/fetchData';
-import { getMessage, getUser } from '../../config/configs';
+import { getMessage, getMessageConver, getUser } from '../../config/configs';
 import { SocketContext } from '../../App';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function MessageUser() {
    const socket = useContext(SocketContext);
+   const navigate = useNavigate();
+
+   const { iduser1 } = useParams();
 
    const [id, setID] = useState('');
    const [idConver, setIDConver] = useState('');
@@ -27,62 +31,152 @@ function MessageUser() {
    // var page = 0;
    const [message, setMessage] = useState([]);
 
-   const handleClickConversation = async (con) => {
-      if (id == con.CONVERSATION.USER_CONVERSATIONs[0].USER_ID) {
-         return;
+   const [tempMes, setTempMes] = useState('');
+
+   const [Alt, setAlt] = useState();
+   const chooseFile = (inputFile) => {
+      const file = inputFile.target.files[0];
+
+      file.preview = URL.createObjectURL(file);
+
+      setAlt(file);
+   };
+
+   const sendImg = async () => {
+      try {
+         await setMessage((list) => [
+            ...list,
+            {
+               SEND_USER_ID: localStorage.getItem('idUser'),
+               CONTENT: Alt.preview,
+               createdAt: new Date().toDateString(),
+               TYPE: 'file',
+            },
+         ]);
+         let formData = new FormData();
+         await formData.append('file', Alt);
+         await formData.append('type', 'image');
+         await fetch(`https://ptit-social-app.onrender.com/api/messege/${idConver}`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+               accessToken: localStorage.getItem('accessToken'),
+            },
+         })
+            .then((json) => json.json())
+            .then((res) => {
+               console.log(idConver);
+               console.log(res);
+            });
+      } catch (e) {
+         console.log(e);
       }
-      await setUser(con);
-      await setIDConver(con.CONVERSATION.ID);
-      await setID(con.CONVERSATION.USER_CONVERSATIONs[0].USER_ID);
-      const res = await getData(
-         getMessage + `/${con.CONVERSATION.ID}?page=${page}`,
-         localStorage.getItem('accessToken'),
-      );
-      if (res.data.result.length > 0) {
-         setMessage(res.data.result.reverse());
-      }
-      console.log(res.data.result);
+      // setAlt();
+   };
+
+   const handleClickConversation = async (id) => {
+      navigate(`/message/${id}`);
+      // if (id == con.CONVERSATION.USER_CONVERSATIONs[0].USER_ID) {
+      //    return;
+      // }
+      // await setUser(con);
+      // await setIDConver(con.CONVERSATION.ID);
+      // await setID(con.CONVERSATION.USER_CONVERSATIONs[0].USER_ID);
+      // const res = await getData(
+      //    getMessage + `/${con.CONVERSATION.ID}?page=${page}`,
+      //    localStorage.getItem('accessToken'),
+      // );
+      // if (res.data.result.length > 0) {
+      //    setMessage(res.data.result.reverse());
+      // }
+      // console.log(res.data.result);
    };
 
    const handleLoadMore = async () => {
       setPage(page + 1);
-      const res = await getData(getMessage + `/${idConver}?page=${page + 1}`, localStorage.getItem('accessToken'));
+      const res = await getData(
+         getMessageConver + `/${idConver}?page=${page + 1}`,
+         localStorage.getItem('accessToken'),
+      );
       await setMessage((list) => res.data.result.reverse().concat(list));
+   };
+
+   const changeMes = (e) => {
+      setTempMes(e.target.value);
    };
 
    const sendMessage = async (e) => {
       if (document.getElementById('input-message').value == '') {
          return;
       }
-      const res = await postData(
-         getMessage + `/${idConver}`,
-         {
-            type: 'text',
-            content: document.getElementById('input-message').value,
-         },
-         localStorage.getItem('accessToken'),
-      );
-      if (res.data.status == 1) {
-         await setMessage((list) => [
-            ...list,
+      try {
+         const res = await postData(
+            getMessageConver + `/${idConver}`,
             {
-               ID: 0,
-               CONTENT: e.target.value,
-               createdAt: new Date().toDateString(),
+               type: 'text',
+               content: tempMes,
             },
-         ]);
-         e.target.value = '';
-         socket.emit('');
+            localStorage.getItem('accessToken'),
+         );
+         if (res.data.status == 1) {
+            await setMessage((list) => [
+               ...list,
+               {
+                  RECEIVE_USER_ID: iduser1,
+                  SEND_USER_ID: localStorage.getItem('idUser'),
+                  CONTENT: tempMes,
+                  createdAt: new Date().toDateString(),
+                  TYPE: 'text',
+               },
+            ]);
+
+            await socket.emit('addMessage', {
+               RECEIVE_USER_ID: iduser1,
+               SEND_USER_ID: localStorage.getItem('idUser'),
+               CONTENT: tempMes,
+               createdAt: new Date().toDateString(),
+               TYPE: 'text',
+            });
+            await setTempMes('');
+            e.target.value = '';
+         }
+      } catch (e) {
+         console.log(e);
       }
    };
 
    useEffect(() => {
-      const fetchData = async () => {
-         const res3 = await getData(getUser + `/${localStorage.getItem('idUser')}`, '');
-         setOwner(res3.data.result);
-      };
-      fetchData();
-   }, []);
+      try {
+         const fetchData = async () => {
+            const res3 = await getData(
+               getUser + `/${localStorage.getItem('idUser')}`,
+               localStorage.getItem('accessToken'),
+            );
+            setOwner(res3.data.result);
+
+            const res1 = await getData(getMessage + `/${iduser1}?page=0`, localStorage.getItem('accessToken'));
+            setMessage(res1.data.result.reverse());
+            if (res1.data.result[0] == undefined) {
+               setIDConver('');
+            } else {
+               setIDConver(res1.data.result[0].CONVERSATION_ID);
+               console.log(res1.data.result[0].CONVERSATION_ID);
+            }
+
+            const res2 = await getData(getUser + `/${iduser1}`, localStorage.getItem('accessToken'));
+            setUser(res2.data.result);
+         };
+         fetchData();
+      } catch (e) {
+         console.log(e);
+      }
+   }, [iduser1]);
+
+   useEffect(() => {
+      socket.on('messegeToClient', async (data) => {
+         await setMessage((listMes) => [...listMes, data]);
+      });
+   }, [socket]);
 
    return (
       <div className={cx('wrapper')}>
@@ -93,18 +187,18 @@ function MessageUser() {
             <div className={cx('sidebar-list-user')}>
                <SidebarListUserMessage handleClickConversation={handleClickConversation} />
             </div>
-            {id != '' ? (
+            {user != undefined ? (
                <div className={cx('conversation')}>
                   <div className={cx('header-conversation')}>
-                     <ImgToProfile src={user.CONVERSATION.USER_CONVERSATIONs[0].USER.AVATAR} />
-                     <div>{user.CONVERSATION.USER_CONVERSATIONs[0].USER.USERNAME}</div>
+                     <ImgToProfile src={user.AVATAR} />
+                     <div>{user.USERNAME}</div>
                   </div>
                   <ScrollToBottom className={cx('scroll')}>
                      <div className={cx('body-conversation')}>
                         <button onClick={handleLoadMore}>Load more</button>
-                        {message.length > 0
+                        {message != undefined
                            ? message.map((mes) => {
-                                if (mes.SEND_USER_ID == id)
+                                if (mes.SEND_USER_ID == iduser1)
                                    return (
                                       <div className={cx('container-message')}>
                                          <div className={cx('orthermessage')}>
@@ -112,7 +206,7 @@ function MessageUser() {
                                          </div>
                                       </div>
                                    );
-                                else
+                                else if (mes.SEND_USER_ID == localStorage.getItem('idUser'))
                                    return (
                                       <div className={cx('container-message')}>
                                          <div className={cx('mymessage')}>
@@ -130,6 +224,7 @@ function MessageUser() {
                         className={cx('input-message')}
                         placeholder="Message..."
                         onKeyPress={(e) => e.key === 'Enter' && sendMessage(e)}
+                        onChange={changeMes}
                      />
                      {/* <span
                         className={cx('btn-send')}
@@ -141,8 +236,13 @@ function MessageUser() {
                      </span> */}
                      <label for="file">
                         <FontAwesomeIcon className={cx('btn-send-img')} icon={faImage} />
-                        <input type="file" hidden id="file" accept="image/png, image/jpeg" />
+                        <input type="file" hidden id="file" accept="image/png, image/jpeg" onChange={chooseFile} />
                      </label>
+                     {Alt && (
+                        <div>
+                           <FontAwesomeIcon className={cx('btn-send')} icon={faPaperPlane} onClick={sendImg} />
+                        </div>
+                     )}
                   </div>
                </div>
             ) : (

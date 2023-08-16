@@ -5,14 +5,17 @@ import AvatarProfile from '../../components/AvatarProfile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear, faTableCells } from '@fortawesome/free-solid-svg-icons';
 import { img } from '../../config';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
 import { getData } from '../../config/fetchData';
-import { follow, getUser, getUserPost, unfollow } from '../../config/configs';
+import { follow, getComment, getUser, getUserPost, unfollow } from '../../config/configs';
+import { SocketContext } from '../../App';
 
 const cx = classNames.bind(styles);
 
-function Profile({ setShowLogout }) {
+function Profile({ setShowLogout, setShowStatusPost, setStatus, setListComment }) {
+   const navigate = useNavigate();
+   const socket = useContext(SocketContext);
    const { id } = useParams();
 
    const [user, setUser] = useState({});
@@ -21,37 +24,51 @@ function Profile({ setShowLogout }) {
    const [following, setFollowing] = useState(0);
 
    const handleFollow = async () => {
-      const res = await getData(follow + `/${id}`, localStorage.getItem('accessToken'));
-      if (res.data.status == 1) {
-         setFollowing(1);
+      try {
+         const res = await getData(follow + `/${id}`, localStorage.getItem('accessToken'));
+         if (res.data.status == 1) {
+            setFollowing(1);
+            socket.emit('follow', user);
+         }
+      } catch (e) {
+         console.log(e);
       }
    };
 
    const handleUnFollow = async () => {
-      const res = await getData(unfollow + `/${id}`, localStorage.getItem('accessToken'));
-      console.log(res);
-      if (res.data.status == 1) {
-         setFollowing(0);
+      try {
+         const res = await getData(unfollow + `/${id}`, localStorage.getItem('accessToken'));
+         console.log(res);
+         if (res.data.status == 1) {
+            setFollowing(0);
+         }
+      } catch (e) {
+         console.log(e);
       }
    };
 
-   const handleMessage = () => {};
+   const handleMessage = async () => {
+      await navigate(`/message/${id}`);
+   };
 
    useEffect(() => {
-      const fetchData = async () => {
-         const res = await getData(getUser + `/${id}`, localStorage.getItem('accessToken'));
-         console.log(res);
-         setFollowing(res.data.result.ISFOLLOWED);
-         setUser(res.data.result);
-         const res3 = await getData(
-            getUser + `/${localStorage.getItem('idUser')}`,
-            localStorage.getItem('accessToken'),
-         );
-         setOwner(res3.data.result);
-         const res2 = await getData(getUserPost + `/${id}`, localStorage.getItem('accessToken'));
-         setListPost(res2.data.result);
-      };
-      fetchData();
+      try {
+         const fetchData = async () => {
+            const res = await getData(getUser + `/${id}`, localStorage.getItem('accessToken'));
+            setFollowing(res.data.result.ISFOLLOWED);
+            setUser(res.data.result);
+            const res3 = await getData(
+               getUser + `/${localStorage.getItem('idUser')}`,
+               localStorage.getItem('accessToken'),
+            );
+            setOwner(res3.data.result);
+            const res2 = await getData(getUserPost + `/${id}`, localStorage.getItem('accessToken'));
+            setListPost(res2.data.result);
+         };
+         fetchData();
+      } catch (e) {
+         console.log(e);
+      }
    }, [id]);
 
    return (
@@ -107,7 +124,25 @@ function Profile({ setShowLogout }) {
             </div>
             <div className={cx('body-post')}>
                {listPost.map((post) => {
-                  return <img className={cx('img')} src={post.POST_IMAGEs[0].IMAGE} />;
+                  return (
+                     <img
+                        className={cx('img')}
+                        src={post.POST_IMAGEs[0].IMAGE}
+                        onClick={async () => {
+                           try {
+                              setStatus(post);
+                              setShowStatusPost(true);
+                              const res = await getData(
+                                 getComment + `/${post.ID}`,
+                                 localStorage.getItem('accessToken'),
+                              );
+                              setListComment(res.data.result);
+                           } catch (e) {
+                              console.log(e);
+                           }
+                        }}
+                     />
+                  );
                })}
             </div>
          </div>

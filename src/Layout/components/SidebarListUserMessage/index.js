@@ -56,7 +56,7 @@ function SidebarListUserMessage({ handleClickConversation }) {
                      <div
                         className={cx('conversation')}
                         onClick={() => {
-                           handleClickConversation(con);
+                           handleClickConversation(con.CONVERSATION.USER_CONVERSATIONs[0].USER_ID);
                         }}
                      >
                         <ImgToProfile src={con.CONVERSATION.USER_CONVERSATIONs[0].USER.AVATAR} />

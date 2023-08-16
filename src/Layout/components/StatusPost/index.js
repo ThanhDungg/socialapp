@@ -17,21 +17,37 @@ import { postComment } from '../../../config/configs';
 
 const cx = classNames.bind(styles);
 
-function StatusPost({ status, setShowStatusPost, listComment }) {
+function StatusPost({ status, setShowStatusPost, listComment, setListComment, user }) {
    const socket = useContext(SocketContext);
+   console.log(status);
 
    const sendComment = async (id) => {
-      const res = await postData(
-         postComment + `${id}/none`,
-         {
-            content: document.getElementById(`comment-${id}`).value,
-         },
-         localStorage.getItem('accessToken'),
-      );
-      if (res.data.status == 1) {
-         document.getElementById(`comment-${id}`).value = '';
-      } else {
-         alert('Comment fail');
+      try {
+         const res = await postData(
+            postComment + `${id}/none`,
+            {
+               content: document.getElementById(`comment-${id}`).value,
+            },
+            localStorage.getItem('accessToken'),
+         );
+         if (res.data.status == 1) {
+            setListComment((list) => [
+               ...list,
+               {
+                  COMMENTs: [],
+                  CONTENT: document.getElementById(`comment-${id}`).value,
+                  POST_ID: status.ID,
+                  USER: user,
+                  createdAt: new Date(),
+               },
+            ]);
+            socket.emit('createComment', status);
+            document.getElementById(`comment-${id}`).value = '';
+         } else {
+            alert('Comment fail');
+         }
+      } catch (e) {
+         console.log(e);
       }
    };
 
@@ -44,7 +60,11 @@ function StatusPost({ status, setShowStatusPost, listComment }) {
          />
          <div className={cx('body-status')}>
             <div className={cx('status')}>
-               <HeaderStatus avatar={status.USER.AVATAR} fullname={status.USER.USERNAME} caption={'1d'} />
+               <HeaderStatus
+                  avatar={status.USER.AVATAR}
+                  fullname={status.USER.USERNAME}
+                  caption={new Date(status.createdAt).toDateString()}
+               />
                <BodyStatus status={status} />
                <div>
                   <FormReaction socket={socket} post={status} />

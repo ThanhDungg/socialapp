@@ -5,10 +5,11 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import BtnNextPrev from '../../../components/BtnNextPrev';
 import HeaderStatus from '../../../components/HeaderStatus';
+import { img } from '../../../config';
 
 const cx = classNames.bind(styles);
 
-function CreatePost({ handleHiddenCreatePost, setIsLoading }) {
+function CreatePost({ handleHiddenCreatePost, setIsLoading, user }) {
    const [listImg, setListImg] = useState([]);
    const [indexImg, setIndexImg] = useState(0);
 
@@ -96,11 +97,23 @@ function CreatePost({ handleHiddenCreatePost, setIsLoading }) {
                            <BtnNextPrev handleNext={handleNext} handlePrev={handlePrev} />
                         </div>
                      )}
-                     <input id="input-img" name="files" type="file" hidden multiple onChange={chooseFile} />
+                     <input
+                        id="input-img"
+                        name="files"
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        multiple
+                        onChange={chooseFile}
+                     />
                   </div>
                   <div className={cx('status')}>
                      <div className={cx('header-status')}>
-                        <HeaderStatus fullname="thanhdung2k" caption="" />
+                        <HeaderStatus
+                           fullname={user != undefined ? user.USERNAME : 'user'}
+                           caption=""
+                           avatar={user != undefined ? user.AVATAR : img}
+                        />
                      </div>
                      <div className={cx('body-status')}>
                         <textarea id="input-status" className={cx('input-status')} placeholder="Write a caption..." />

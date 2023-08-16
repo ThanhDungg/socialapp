@@ -12,7 +12,7 @@ const publicRoutes = [
    { path: '/register', component: RegisterPage, Layout: RegisterPage },
    { path: '/forgotpassword', component: ForgotPasswordPage, Layout: ForgotPasswordPage },
    { path: '/message', component: MessagePage, Layout: MessagePage },
-   { path: '/message/:idconver1/:iduser1', component: MessageUserPage, Layout: MessageUserPage },
+   { path: '/message/:iduser1', component: MessageUserPage, Layout: MessageUserPage },
    { path: '/profile/:id', component: ProfilePage, Layout: ProfilePage },
 ];
 

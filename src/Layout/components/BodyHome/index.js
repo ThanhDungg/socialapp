@@ -59,7 +59,7 @@ function BodyHome({
                                 id={status.USER.ID}
                                 avatar={status.USER.AVATAR}
                                 fullname={status.USER.USERNAME}
-                                caption={'1d'}
+                                caption={new Date(status.createdAt).toDateString()}
                                 children={<FontAwesomeIcon icon={faEllipsis} />}
                              />
                              <BodyStatus status={status} />
@@ -72,6 +72,7 @@ function BodyHome({
                                          setShowStatusPost(true);
                                       }}
                                       setStatusPost={setStatusPost}
+                                      user={user}
                                    />
                                 </div>
                                 <TotalLike Like={status.LIKES} id={status.ID} />
@@ -84,7 +85,7 @@ function BodyHome({
                                          getComment + `${status.ID}`,
                                          localStorage.getItem('accessToken'),
                                       );
-                                      setListComment(res.data.result);
+                                      setListComment(res.data.result.reverse());
                                    }}
                                 />
                                 <InputCmt />

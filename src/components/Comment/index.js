@@ -9,22 +9,26 @@ const cx = classNames.bind(styles);
 
 function Comment({ content, avatar, username, time, id, idpost }) {
    const handleCmt = async () => {
-      if (document.getElementById(`${id}`).value == '') {
-         alert('Bạn chưa nhập comment.');
-         return;
-      }
-      const res = await postData(
-         postComment + `${idpost}/${id}`,
-         {
-            content: document.getElementById(`${id}`).value,
-         },
-         localStorage.getItem('accessToken'),
-      );
-      if (res.data.status == 1) {
-         document.getElementById(`${id}`).value = '';
-         console.log(res);
-      } else {
-         alert('Comment fail');
+      try {
+         if (document.getElementById(`${id}`).value == '') {
+            alert('Bạn chưa nhập comment.');
+            return;
+         }
+         const res = await postData(
+            postComment + `${idpost}/${id}`,
+            {
+               content: document.getElementById(`${id}`).value,
+            },
+            localStorage.getItem('accessToken'),
+         );
+         if (res.data.status == 1) {
+            document.getElementById(`${id}`).value = '';
+            console.log(res);
+         } else {
+            alert('Comment fail');
+         }
+      } catch (e) {
+         console.log(e);
       }
    };
    return (
