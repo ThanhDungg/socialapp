@@ -156,12 +156,7 @@ function MessageUser() {
 
             const res1 = await getData(getMessage + `/${iduser1}?page=0`, localStorage.getItem('accessToken'));
             setMessage(res1.data.result.reverse());
-            if (res1.data.result[0] == undefined) {
-               setIDConver('');
-            } else {
-               setIDConver(res1.data.result[0].CONVERSATION_ID);
-               console.log(res1.data.result[0].CONVERSATION_ID);
-            }
+            setIDConver(res1.data.conversationId);
 
             const res2 = await getData(getUser + `/${iduser1}`, localStorage.getItem('accessToken'));
             setUser(res2.data.result);
