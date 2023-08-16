@@ -130,7 +130,7 @@ function MessageUser() {
                },
             ]);
 
-            await socket.emit('addMessage', {
+            await socket.emit('addMessege', {
                RECEIVE_USER_ID: iduser1,
                SEND_USER_ID: localStorage.getItem('idUser'),
                CONTENT: tempMes,
@@ -174,6 +174,7 @@ function MessageUser() {
 
    useEffect(() => {
       socket.on('messegeToClient', async (data) => {
+         console.log(data);
          await setMessage((listMes) => [...listMes, data]);
       });
    }, [socket]);
