@@ -86,6 +86,8 @@ function RegisterPage() {
          setErrormsg('Email không được để trống');
       } else if (!filter.test(email)) {
          setErrormsg('Bạn chưa nhập đúng định dạng Email');
+      } else if (phone.length != 10) {
+         setErrormsg('Số điện thoại phải có 10 số.');
       } else if (password == '') {
          setErrormsg('Mật khẩu không được để trống');
       } else if (rePassword == '' || rePassword != password) {
@@ -93,9 +95,9 @@ function RegisterPage() {
       } else {
          setIsLoading(true);
          if (document.getElementById('nam').checked) {
-            setGender('Nam');
+            setGender('Male');
          } else {
-            setGender('Nữ');
+            setGender('Female');
          }
          var res = await postData(
             regisOTP,
