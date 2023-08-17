@@ -28,7 +28,7 @@ function Profile({ setShowLogout, setShowStatusPost, setStatus, setListComment }
          const res = await getData(follow + `/${id}`, localStorage.getItem('accessToken'));
          if (res.data.status == 1) {
             setFollowing(1);
-            socket.emit('follow', user);
+            socket.emit('follow', id);
          }
       } catch (e) {
          console.log(e);

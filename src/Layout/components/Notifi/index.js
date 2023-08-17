@@ -31,32 +31,44 @@ function Notifi({ handleHiddenShow }) {
             <div className={cx('header-body')}>Recent</div>
             <div>
                {listUser.map((user) => {
-                  if (user.TYPE == 'follow') {
-                     return (
-                        <div className={cx('user')}>
-                           <ImgToProfile src={user.USER.AVATAR} toLink={`/profile/${user.ID}`} />
-                           <div>
-                              <div className={cx('username')}>
-                                 <b>{user.USER.USERNAME}</b>
-                              </div>
-                              đã follow bạn
-                           </div>
-                        </div>
-                     );
-                  }
                   return (
                      <div className={cx('user')}>
-                        <ImgToProfile src={user.AVATAR} toLink={`/profile/${user.ID}`} />
+                        <ImgToProfile src={user.USER.AVATAR} toLink={`/profile/${user.USER_ID}`} />
                         <div>
                            <div className={cx('username')}>
-                              <b>{user.USERNAME}</b>
+                              <b>{user.USER.USERNAME}</b>
                            </div>
-                           <div>
-                              <i>{user.FULLNAME}</i>
-                           </div>
+                           đã {user.TYPE} bạn
                         </div>
                      </div>
                   );
+                  // if (user.TYPE == 'follow') {
+                  //    return (
+                  //       <div className={cx('user')}>
+                  //          <ImgToProfile src={user.USER.AVATAR} toLink={`/profile/${user.USER_ID}`} />
+                  //          <div>
+                  //             <div className={cx('username')}>
+                  //                <b>{user.USER.USERNAME}</b>
+                  //             </div>
+                  //             đã follow bạn
+                  //          </div>
+                  //       </div>
+                  //    );
+                  // } else if(user.TYPE == 'comment') {
+                  //    return (
+                  //       <div className={cx('user')}>
+                  //          <ImgToProfile src={user.USER.AVATAR} toLink={`/profile/${user.USER_ID}`} />
+                  //          <div>
+                  //             <div className={cx('username')}>
+                  //                <b>{user.USERNAME}</b>
+                  //             </div>
+                  //             <div>
+                  //                <i>{user.FULLNAME}</i>
+                  //             </div>
+                  //          </div>
+                  //       </div>
+                  //    );
+                  // }
                })}
             </div>
          </div>
